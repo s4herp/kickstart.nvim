@@ -216,6 +216,17 @@ vim.keymap.set('n', '<leader><', '<cmd>bprev<cr>', { desc = 'Previous buffer' })
 -- EDICIÓN (usando letras que no están en uso)
 vim.keymap.set('n', '<leader>a', 'ggVG', { desc = 'Select [A]ll' })
 
+-- DOCKER COMMANDS para mudango (usando <leader>d)
+vim.keymap.set('n', '<leader>dr', '<cmd>!docker compose exec web bin/rspec<cr>', { desc = '[D]ocker [R]spec all' })
+vim.keymap.set('n', '<leader>drf', '<cmd>!docker compose exec web bin/rspec %<cr>', { desc = '[D]ocker [R]spec [F]ile' })
+vim.keymap.set('n', '<leader>drl', '<cmd>!docker compose exec web bin/rspec %:<C-r>=line(".")<cr><cr>', { desc = '[D]ocker [R]spec [L]ine' })
+vim.keymap.set('n', '<leader>drc', '<cmd>!docker compose exec web rubocop<cr>', { desc = '[D]ocker [R]ubocop all' })
+vim.keymap.set('n', '<leader>drcf', '<cmd>!docker compose exec web rubocop %<cr>', { desc = '[D]ocker [R]ubocop [F]ile' })
+vim.keymap.set('n', '<leader>drca', '<cmd>!docker compose exec web rubocop --auto-correct<cr>', { desc = '[D]ocker [R]ubocop [A]uto-correct' })
+vim.keymap.set('n', '<leader>dc', '<cmd>!docker compose exec web rails console<cr>', { desc = '[D]ocker [C]onsole' })
+vim.keymap.set('n', '<leader>dm', '<cmd>!docker compose exec web rails db:migrate<cr>', { desc = '[D]ocker [M]igrate' })
+vim.keymap.set('n', '<leader>ds', '<cmd>!docker compose exec web rails server<cr>', { desc = '[D]ocker [S]erver' })
+
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
@@ -233,6 +244,49 @@ vim.api.nvim_create_autocmd('TextYankPost', {
   group = vim.api.nvim_create_augroup('kickstart-highlight-yank', { clear = true }),
   callback = function()
     vim.hl.on_yank()
+  end,
+})
+
+-- Ruby/Rails specific autocommands
+local ruby_augroup = vim.api.nvim_create_augroup('ruby-rails-config', { clear = true })
+
+-- Set specific options for Ruby files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'ruby',
+  group = ruby_augroup,
+  callback = function()
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.tabstop = 2
+    vim.opt_local.expandtab = true
+    vim.opt_local.softtabstop = 2
+    -- Enable spell checking for comments in Ruby files
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = 'en_us'
+  end,
+})
+
+-- Auto-format Ruby files with RuboCop on save (only if in mudango directory)
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = '*.rb',
+  group = ruby_augroup,
+  callback = function()
+    local file_path = vim.fn.expand('%:p')
+    if string.find(file_path, '/mudango/') then
+      -- Only format with RuboCop if we're in the mudango project
+      vim.cmd('silent !docker compose exec web rubocop --auto-correct % 2>/dev/null || true')
+      vim.cmd('edit!')
+    end
+  end,
+})
+
+-- RSpec specific settings
+vim.api.nvim_create_autocmd('BufRead', {
+  pattern = '*_spec.rb',
+  group = ruby_augroup,
+  callback = function()
+    -- Set local keymaps for RSpec files
+    vim.keymap.set('n', '<leader>rs', '<cmd>!docker compose exec web bin/rspec %<cr>', { desc = '[R]spec [S]ingle file', buffer = true })
+    vim.keymap.set('n', '<leader>rl', '<cmd>!docker compose exec web bin/rspec %:<C-r>=line(".")<cr><cr>', { desc = '[R]spec [L]ine', buffer = true })
   end,
 })
 
@@ -322,7 +376,7 @@ require('lazy').setup({
     'akinsho/bufferline.nvim',
     version = '*',
     dependencies = 'nvim-tree/nvim-web-devicons',
-    event = 'VeryLazy',
+    event = 'BufReadPost', -- Load after first buffer is read
     keys = {
       -- Gestión de pestañas
       { '<leader>bp', '<cmd>BufferLineTogglePin<cr>', desc = 'Pin Buffer' },
@@ -382,14 +436,18 @@ require('lazy').setup({
 
   {
     'rafamadriz/friendly-snippets',
+    event = 'InsertEnter', -- Load only when entering insert mode
     config = function()
       require('luasnip.loaders.from_vscode').lazy_load()
+      -- Load custom Ruby/Rails snippets
+      require('custom.snippets')
     end,
   },
 
   {
     'vim-test/vim-test',
     dependencies = { 'tpope/vim-dispatch' },
+    ft = { 'ruby', 'javascript', 'typescript' }, -- Load only for test files
     keys = {
       { '<leader>tt', '<cmd>TestNearest<CR>', desc = 'Run nearest test' },
       { '<leader>tf', '<cmd>TestFile<CR>', desc = 'Run current test file' },
@@ -397,14 +455,24 @@ require('lazy').setup({
       { '<leader>tl', '<cmd>TestLast<CR>', desc = 'Run last test' },
     },
     config = function()
-      vim.g['test#strategy'] = 'dispatch' -- o 'neovim' para usar terminal
+      vim.g['test#strategy'] = 'dispatch'
       vim.g['test#ruby#use_bundler'] = 1
       vim.g['test#ruby#rails#executable'] = 'bin/rails'
+      -- Docker configuration for vim-test
+      vim.g['test#ruby#rspec#executable'] = 'docker compose exec web bin/rspec'
+      vim.g['test#ruby#rails#executable'] = 'docker compose exec web bin/rails'
+      vim.g['test#transformation'] = 'docker'
+      vim.g['test#custom_transformations'] = {
+        docker = function(cmd)
+          return 'docker compose exec web ' .. cmd
+        end
+      }
     end,
   },
 
   {
     'tpope/vim-rails',
+    ft = 'ruby', -- Load only for Ruby files
     event = 'BufReadPre',
   },
 
@@ -471,6 +539,10 @@ require('lazy').setup({
         { '<leader>s', group = '[S]earch' },
         { '<leader>t', group = '[T]oggle' },
         { '<leader>h', group = 'Git [H]unk', mode = { 'n', 'v' } },
+        { '<leader>g', group = '[G]it' },
+        { '<leader>b', group = '[B]uffer' },
+        { '<leader>d', group = '[D]ocker' },
+        { '<leader>r', group = '[R]spec (buffer local)' },
       },
     },
   },
@@ -745,6 +817,64 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sn', function()
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
+
+      -- Ruby/Rails specific searches
+      vim.keymap.set('n', '<leader>sm', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/models"},
+          prompt_title = "Find Models"
+        }
+      end, { desc = '[S]earch [M]odels' })
+
+      vim.keymap.set('n', '<leader>sc', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/controllers"},
+          prompt_title = "Find Controllers"
+        }
+      end, { desc = '[S]earch [C]ontrollers' })
+
+      vim.keymap.set('n', '<leader>sv', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/views"},
+          prompt_title = "Find Views"
+        }
+      end, { desc = '[S]earch [V]iews' })
+
+      vim.keymap.set('n', '<leader>st', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"spec"},
+          prompt_title = "Find Tests"
+        }
+      end, { desc = '[S]earch [T]ests' })
+
+      vim.keymap.set('n', '<leader>sj', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/jobs"},
+          prompt_title = "Find Jobs"
+        }
+      end, { desc = '[S]earch [J]obs' })
+
+      vim.keymap.set('n', '<leader>si', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"db/migrate"},
+          prompt_title = "Find Migrations"
+        }
+      end, { desc = '[S]earch M[i]grations' })
+
+      -- Search for Ruby files only
+      vim.keymap.set('n', '<leader>su', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          find_command = { "find", ".", "-name", "*.rb", "-type", "f" },
+          prompt_title = "Find Ruby Files"
+        }
+      end, { desc = '[S]earch R[u]by files' })
     end,
   },
 
@@ -991,8 +1121,30 @@ require('lazy').setup({
             solargraph = {
               diagnostics = true,
               formatting = true,
-              useBundler = false,
+              useBundler = true, -- Enable bundler for better dependency resolution
               completion = true,
+              hover = true,
+              references = true,
+              rename = true,
+              symbols = true,
+              definitions = true,
+              logLevel = 'warn',
+              -- Ruby version specific settings
+              reportErrors = 'typed',
+              castExpression = 'typed',
+              -- Rails specific settings
+              rails = true,
+              -- Performance optimizations for large Rails projects
+              transport = 'stdio',
+              checkGemVersion = false,
+              -- Exclude some directories to improve performance
+              exclude = {
+                "spec/**/*",
+                "test/**/*", 
+                "tmp/**/*",
+                "vendor/**/*",
+                "node_modules/**/*"
+              },
             },
           },
         },
@@ -1242,17 +1394,36 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'ruby', 'javascript', 'typescript', 'json', 'yaml' },
       -- Autoinstall languages that are not installed
       auto_install = true,
+      -- ARM M2 optimization: compile parsers in parallel
+      sync_install = false,
       highlight = {
         enable = true,
         -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
         --  If you are experiencing weird indenting issues, add the language to
         --  the list of additional_vim_regex_highlighting and disabled languages for indent.
         additional_vim_regex_highlighting = { 'ruby' },
+        -- Disable for large files to improve performance
+        disable = function(lang, buf)
+          local max_filesize = 100 * 1024 -- 100 KB
+          local ok, stats = pcall(vim.loop.fs_stat, vim.api.nvim_buf_get_name(buf))
+          if ok and stats and stats.size > max_filesize then
+            return true
+          end
+        end,
       },
       indent = { enable = true, disable = { 'ruby' } },
+      incremental_selection = {
+        enable = true,
+        keymaps = {
+          init_selection = "<C-space>",
+          node_incremental = "<C-space>",
+          scope_incremental = "<C-s>",
+          node_decremental = "<C-backspace>",
+        },
+      },
     },
     -- There are additional nvim-treesitter modules that you can use to interact
     -- with nvim-treesitter. You should go explore a few and see what interests you:
@@ -1309,6 +1480,28 @@ require('lazy').setup({
     },
   },
 })
+
+-- ARM M2 macOS optimizations
+if vim.fn.has('macunix') == 1 and vim.fn.system('uname -m'):match('arm64') then
+  -- Optimize for Apple Silicon
+  vim.opt.shell = '/bin/zsh'
+  
+  -- Set better defaults for ARM M2
+  vim.opt.lazyredraw = true
+  vim.opt.regexpengine = 1
+  vim.opt.synmaxcol = 200
+  
+  -- LSP and completion optimizations
+  vim.opt.updatetime = 100
+  vim.opt.timeout = true
+  vim.opt.timeoutlen = 300
+  
+  -- Better file watching on macOS
+  vim.opt.backupskip = '/tmp/*,/private/tmp/*'
+  
+  -- Optimize for faster startup
+  vim.loader.enable()
+end
 
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
