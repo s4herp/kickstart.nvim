@@ -166,119 +166,7 @@ vim.o.scrolloff = 10
 -- See `:help 'confirm'`
 vim.o.confirm = true
 
--- [[ Basic Keymaps ]]
---  See `:help vim.keymap.set()`
-
--- Clear highlights on search when pressing <Esc> in normal mode
---  See `:help hlsearch`
-vim.keymap.set('n', '<Esc>', '<cmd>nohlsearch<CR>')
-
--- Diagnostic keymaps
-vim.keymap.set('n', '<leader>q', vim.diagnostic.setloclist, { desc = 'Open diagnostic [Q]uickfix list' })
-
--- Exit terminal mode in the builtin terminal with a shortcut that is a bit easier
--- for people to discover. Otherwise, you normally need to press <C-\><C-n>, which
--- is not what someone will guess without a bit more experience.
---
--- NOTE: This won't work in all terminal emulators/tmux/etc. Try your own mapping
--- or just use <C-\><C-n> to exit terminal mode
-vim.keymap.set('t', '<Esc><Esc>', '<C-\\><C-n>', { desc = 'Exit terminal mode' })
-
--- TIP: Disable arrow keys in normal mode
--- vim.keymap.set('n', '<left>', '<cmd>echo "Use h to move!!"<CR>')
--- vim.keymap.set('n', '<right>', '<cmd>echo "Use l to move!!"<CR>')
--- vim.keymap.set('n', '<up>', '<cmd>echo "Use k to move!!"<CR>')
--- vim.keymap.set('n', '<down>', '<cmd>echo "Use j to move!!"<CR>')
-
--- Keybinds to make split navigation easier.
---  Use CTRL+<hjkl> to switch between windows
---
---  See `:help wincmd` for a list of all window commands
-vim.keymap.set('n', '<C-h>', '<C-w><C-h>', { desc = 'Move focus to the left window' })
-vim.keymap.set('n', '<C-l>', '<C-w><C-l>', { desc = 'Move focus to the right window' })
-vim.keymap.set('n', '<C-j>', '<C-w><C-j>', { desc = 'Move focus to the lower window' })
-vim.keymap.set('n', '<C-k>', '<C-w><C-k>', { desc = 'Move focus to the upper window' })
-
--- NAVEGACIÓN Y ARCHIVOS (usando letras libres)
-vim.keymap.set('n', '<leader>p', '<cmd>Telescope find_files<cr>', { desc = 'Find files ([P]roject files)' })
-vim.keymap.set('n', '<leader>P', '<cmd>Telescope find_files hidden=true<cr>', { desc = 'Find all files (including hidden)' })
-
--- BUFFER MANAGEMENT (usando w para window/close)
-vim.keymap.set('n', '<leader>w', '<cmd>bdelete<cr>', { desc = 'Close buffer ([W]indow close)' })
-vim.keymap.set('n', '<leader>W', '<cmd>bdelete!<cr>', { desc = 'Force close buffer' })
-vim.keymap.set('n', '<leader>n', '<cmd>enew<cr>', { desc = '[N]ew buffer' })
-vim.keymap.set('n', '<leader>o', '<cmd>%bd|e#<cr>', { desc = 'Close [O]ther buffers' })
-vim.keymap.set('n', '<leader>Q', '<cmd>qa<cr>', { desc = '[Q]uit all' })
--- Navegación entre buffers
-vim.keymap.set('n', '<leader>>', '<cmd>bnext<cr>', { desc = 'Next buffer' })
-vim.keymap.set('n', '<leader><', '<cmd>bprev<cr>', { desc = 'Previous buffer' })
-
--- EDICIÓN (usando letras que no están en uso)
-vim.keymap.set('n', '<leader>a', 'ggVG', { desc = 'Select [A]ll' })
-
--- DOCKER COMMANDS para mudango (usando <leader>d)
-vim.keymap.set('n', '<leader>dr', '<cmd>!docker compose exec web bin/rspec<cr>', { desc = '[D]ocker [R]spec all' })
-vim.keymap.set('n', '<leader>drf', '<cmd>!docker compose exec web bin/rspec %<cr>', { desc = '[D]ocker [R]spec [F]ile' })
-vim.keymap.set('n', '<leader>drl', '<cmd>!docker compose exec web bin/rspec %:<C-r>=line(".")<cr><cr>', { desc = '[D]ocker [R]spec [L]ine' })
-vim.keymap.set('n', '<leader>drc', '<cmd>!docker compose exec web rubocop<cr>', { desc = '[D]ocker [R]ubocop all' })
-vim.keymap.set('n', '<leader>drcf', '<cmd>!docker compose exec web rubocop %<cr>', { desc = '[D]ocker [R]ubocop [F]ile' })
-vim.keymap.set('n', '<leader>drca', '<cmd>!docker compose exec web rubocop --auto-correct<cr>', { desc = '[D]ocker [R]ubocop [A]uto-correct' })
-vim.keymap.set('n', '<leader>dc', '<cmd>!docker compose exec web rails console<cr>', { desc = '[D]ocker [C]onsole' })
-vim.keymap.set('n', '<leader>dm', '<cmd>!docker compose exec web rails db:migrate<cr>', { desc = '[D]ocker [M]igrate' })
-vim.keymap.set('n', '<leader>ds', '<cmd>!docker compose exec web rails server<cr>', { desc = '[D]ocker [S]erver' })
-
-
-
-
--- MUDANGO SPECIFIC NAVIGATION (usando <leader>E para "Edit specific")
-vim.keymap.set('n', '<leader>Es', function()
-  require('telescope.builtin').find_files { 
-    cwd = vim.fn.getcwd(),
-    search_dirs = {"app/services"},
-    prompt_title = "Edit Service"
-  }
-end, { desc = '[E]dit [S]ervice' })
-
-vim.keymap.set('n', '<leader>Ew', function()
-  require('telescope.builtin').find_files { 
-    cwd = vim.fn.getcwd(),
-    search_dirs = {"app/workers"},
-    prompt_title = "Edit Worker"
-  }
-end, { desc = '[E]dit [W]orker' })
-
-vim.keymap.set('n', '<leader>Ed', function()
-  require('telescope.builtin').find_files { 
-    cwd = vim.fn.getcwd(),
-    search_dirs = {"app/decorators"},
-    prompt_title = "Edit Decorator"
-  }
-end, { desc = '[E]dit [D]ecorator' })
-
-vim.keymap.set('n', '<leader>Ep', function()
-  require('telescope.builtin').find_files { 
-    cwd = vim.fn.getcwd(),
-    search_dirs = {"app/policies"},
-    prompt_title = "Edit Policy"
-  }
-end, { desc = '[E]dit [P]olicy' })
-
-vim.keymap.set('n', '<leader>Eq', function()
-  require('telescope.builtin').find_files { 
-    cwd = vim.fn.getcwd(),
-    search_dirs = {"app/queries"},
-    prompt_title = "Edit Query"
-  }
-end, { desc = '[E]dit [Q]uery' })
-
--- RAILS CONFIG FILES (usando <leader>F para "Files")
-vim.keymap.set('n', '<leader>Fr', '<cmd>edit config/routes.rb<cr>', { desc = '[F]iles [R]outes' })
-vim.keymap.set('n', '<leader>Fa', '<cmd>edit config/application.rb<cr>', { desc = '[F]iles [A]pplication' })
-vim.keymap.set('n', '<leader>FG', '<cmd>edit Gemfile<cr>', { desc = '[F]iles [G]emfile' })
-vim.keymap.set('n', '<leader>FR', '<cmd>edit README.md<cr>', { desc = '[F]iles [R]eadme' })
-vim.keymap.set('n', '<leader>Fe', '<cmd>edit .env<cr>', { desc = '[F]iles [E]nv' })
-vim.keymap.set('n', '<leader>FD', '<cmd>edit docker-compose.yml<cr>', { desc = '[F]iles [D]ocker' })
-vim.keymap.set('n', '<leader>FC', '<cmd>edit CLAUDE.md<cr>', { desc = '[F]iles [C]laude' })
+require('custom.keymaps').setup()
 
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
@@ -323,11 +211,11 @@ vim.api.nvim_create_autocmd('BufWritePre', {
   pattern = '*.rb',
   group = ruby_augroup,
   callback = function()
-    local file_path = vim.fn.expand('%:p')
+    local file_path = vim.fn.expand '%:p'
     if string.find(file_path, '/mudango/') then
       -- Only format with RuboCop if we're in the mudango project
-      vim.cmd('silent !docker compose exec web rubocop --auto-correct % 2>/dev/null || true')
-      vim.cmd('edit!')
+      vim.cmd 'silent !docker compose exec web rubocop --auto-correct % 2>/dev/null || true'
+      vim.cmd 'edit!'
     end
   end,
 })
@@ -396,32 +284,6 @@ require('lazy').setup({
   --        end,
   --    }
   --
-  -- Here is a more advanced example where we pass configuration
-  -- options to `gitsigns.nvim`.
-  --
-  -- See `:help gitsigns` to understand what the configuration keys do
-  { -- Adds git related signs to the gutter, as well as utilities for managing changes
-    'lewis6991/gitsigns.nvim',
-    opts = {
-      signs = {
-        add = { text = '+' },
-        change = { text = '~' },
-        delete = { text = '_' },
-        topdelete = { text = '‾' },
-        changedelete = { text = '~' },
-      },
-    },
-  },
-
-  {
-    'greggh/claude-code.nvim',
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-    },
-    config = function()
-      require('claude-code').setup()
-    end,
-  },
 
   -- ========== SOLO BUFFERLINE (PESTAÑAS) ==========
 
@@ -493,33 +355,7 @@ require('lazy').setup({
     config = function()
       require('luasnip.loaders.from_vscode').lazy_load()
       -- Load custom Ruby/Rails snippets
-      require('custom.snippets')
-    end,
-  },
-
-  {
-    'vim-test/vim-test',
-    dependencies = { 'tpope/vim-dispatch' },
-    ft = { 'ruby', 'javascript', 'typescript' }, -- Load only for test files
-    keys = {
-      { '<leader>tt', '<cmd>TestNearest<CR>', desc = 'Run nearest test' },
-      { '<leader>tf', '<cmd>TestFile<CR>', desc = 'Run current test file' },
-      { '<leader>ta', '<cmd>TestSuite<CR>', desc = 'Run all tests' },
-      { '<leader>tl', '<cmd>TestLast<CR>', desc = 'Run last test' },
-    },
-    config = function()
-      vim.g['test#strategy'] = 'dispatch'
-      vim.g['test#ruby#use_bundler'] = 1
-      vim.g['test#ruby#rails#executable'] = 'bin/rails'
-      -- Docker configuration for vim-test
-      vim.g['test#ruby#rspec#executable'] = 'docker compose exec web bin/rspec'
-      vim.g['test#ruby#rails#executable'] = 'docker compose exec web bin/rails'
-      vim.g['test#transformation'] = 'docker'
-      vim.g['test#custom_transformations'] = {
-        docker = function(cmd)
-          return 'docker compose exec web ' .. cmd
-        end
-      }
+      require 'custom.snippets'
     end,
   },
 
@@ -527,6 +363,20 @@ require('lazy').setup({
     'tpope/vim-rails',
     ft = 'ruby', -- Load only for Ruby files
     event = 'BufReadPre',
+  },
+
+  {
+    'nvim-pack/nvim-spectre',
+    keys = {
+      {
+        '<leader>sR',
+        function()
+          require('spectre').open()
+        end,
+        desc = '[S]earch [R]eplace (Spectre)',
+      },
+    },
+    opts = {},
   },
 
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
@@ -599,6 +449,7 @@ require('lazy').setup({
         { '<leader>e', group = '[E]dit Rails' },
         { '<leader>R', group = '[R]ails' },
         { '<leader>E', group = '[E]dit Specific' },
+        { '<leader>F', group = '[F]iles' },
         { '<leader>A', group = '[A]lternative' },
       },
     },
@@ -844,6 +695,7 @@ require('lazy').setup({
       vim.keymap.set('n', '<leader>sh', builtin.help_tags, { desc = '[S]earch [H]elp' })
       vim.keymap.set('n', '<leader>sk', builtin.keymaps, { desc = '[S]earch [K]eymaps' })
       vim.keymap.set('n', '<leader>sf', builtin.find_files, { desc = '[S]earch [F]iles' })
+      vim.keymap.set('n', '<leader>sF', '<cmd>Telescope find_files hidden=true<cr>', { desc = 'Find all files (including hidden)' })
       vim.keymap.set('n', '<leader>ss', builtin.builtin, { desc = '[S]earch [S]elect Telescope' })
       vim.keymap.set('n', '<leader>sw', builtin.grep_string, { desc = '[S]earch current [W]ord' })
       vim.keymap.set('n', '<leader>sg', builtin.live_grep, { desc = '[S]earch by [G]rep' })
@@ -877,181 +729,181 @@ require('lazy').setup({
 
       -- Ruby/Rails specific searches
       vim.keymap.set('n', '<leader>sm', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/models"},
-          prompt_title = "Find Models"
+          search_dirs = { 'app/models' },
+          prompt_title = 'Find Models',
         }
       end, { desc = '[S]earch [M]odels' })
 
       vim.keymap.set('n', '<leader>sc', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/controllers"},
-          prompt_title = "Find Controllers"
+          search_dirs = { 'app/controllers' },
+          prompt_title = 'Find Controllers',
         }
       end, { desc = '[S]earch [C]ontrollers' })
 
       vim.keymap.set('n', '<leader>sv', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/views"},
-          prompt_title = "Find Views"
+          search_dirs = { 'app/views' },
+          prompt_title = 'Find Views',
         }
       end, { desc = '[S]earch [V]iews' })
 
       vim.keymap.set('n', '<leader>st', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"spec"},
-          prompt_title = "Find Tests"
+          search_dirs = { 'spec' },
+          prompt_title = 'Find Tests',
         }
       end, { desc = '[S]earch [T]ests' })
 
       vim.keymap.set('n', '<leader>sj', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/jobs"},
-          prompt_title = "Find Jobs"
+          search_dirs = { 'app/jobs' },
+          prompt_title = 'Find Jobs',
         }
       end, { desc = '[S]earch [J]obs' })
 
       vim.keymap.set('n', '<leader>si', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"db/migrate"},
-          prompt_title = "Find Migrations"
+          search_dirs = { 'db/migrate' },
+          prompt_title = 'Find Migrations',
         }
       end, { desc = '[S]earch M[i]grations' })
 
       -- Search for Ruby files only
       vim.keymap.set('n', '<leader>su', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          find_command = { "find", ".", "-name", "*.rb", "-type", "f" },
-          prompt_title = "Find Ruby Files"
+          find_command = { 'find', '.', '-name', '*.rb', '-type', 'f' },
+          prompt_title = 'Find Ruby Files',
         }
       end, { desc = '[S]earch R[u]by files' })
 
       -- RAILS SPECIFIC SEARCHES - Extended (usando <leader>R para "Rails")
       vim.keymap.set('n', '<leader>RM', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/models"},
-          prompt_title = "Rails Models"
+          search_dirs = { 'app/models' },
+          prompt_title = 'Rails Models',
         }
       end, { desc = '[R]ails [M]odels' })
 
       vim.keymap.set('n', '<leader>RC', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/controllers"},
-          prompt_title = "Rails Controllers"
+          search_dirs = { 'app/controllers' },
+          prompt_title = 'Rails Controllers',
         }
       end, { desc = '[R]ails [C]ontrollers' })
 
       vim.keymap.set('n', '<leader>RV', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/views"},
-          prompt_title = "Rails Views"
+          search_dirs = { 'app/views' },
+          prompt_title = 'Rails Views',
         }
       end, { desc = '[R]ails [V]iews' })
 
       vim.keymap.set('n', '<leader>RS', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/services"},
-          prompt_title = "Rails Services"
+          search_dirs = { 'app/services' },
+          prompt_title = 'Rails Services',
         }
       end, { desc = '[R]ails [S]ervices' })
 
       vim.keymap.set('n', '<leader>RJ', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/jobs"},
-          prompt_title = "Rails Jobs"
+          search_dirs = { 'app/jobs' },
+          prompt_title = 'Rails Jobs',
         }
       end, { desc = '[R]ails [J]obs' })
 
       vim.keymap.set('n', '<leader>RH', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/helpers"},
-          prompt_title = "Rails Helpers"
+          search_dirs = { 'app/helpers' },
+          prompt_title = 'Rails Helpers',
         }
       end, { desc = '[R]ails [H]elpers' })
 
       vim.keymap.set('n', '<leader>RL', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"lib"},
-          prompt_title = "Rails Lib"
+          search_dirs = { 'lib' },
+          prompt_title = 'Rails Lib',
         }
       end, { desc = '[R]ails [L]ib' })
 
       vim.keymap.set('n', '<leader>RF', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"spec/factories"},
-          prompt_title = "Rails Factories"
+          search_dirs = { 'spec/factories' },
+          prompt_title = 'Rails Factories',
         }
       end, { desc = '[R]ails [F]actories' })
 
       vim.keymap.set('n', '<leader>RR', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"config/routes"},
-          prompt_title = "Rails Routes"
+          search_dirs = { 'config/routes' },
+          prompt_title = 'Rails Routes',
         }
       end, { desc = '[R]ails [R]outes' })
 
       vim.keymap.set('n', '<leader>RI', function()
-        builtin.find_files { 
+        builtin.find_files {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"config/initializers"},
-          prompt_title = "Rails Initializers"
+          search_dirs = { 'config/initializers' },
+          prompt_title = 'Rails Initializers',
         }
       end, { desc = '[R]ails [I]nitializers' })
 
       -- RAILS CONTENT SEARCHES (grep in Rails directories)
       vim.keymap.set('n', '<leader>Rm', function()
-        builtin.live_grep { 
+        builtin.live_grep {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/models"},
-          prompt_title = "Grep in Models"
+          search_dirs = { 'app/models' },
+          prompt_title = 'Grep in Models',
         }
       end, { desc = '[R]ails grep [m]odels' })
 
       vim.keymap.set('n', '<leader>Rc', function()
-        builtin.live_grep { 
+        builtin.live_grep {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/controllers"},
-          prompt_title = "Grep in Controllers"
+          search_dirs = { 'app/controllers' },
+          prompt_title = 'Grep in Controllers',
         }
       end, { desc = '[R]ails grep [c]ontrollers' })
 
       vim.keymap.set('n', '<leader>Rv', function()
-        builtin.live_grep { 
+        builtin.live_grep {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/views"},
-          prompt_title = "Grep in Views"
+          search_dirs = { 'app/views' },
+          prompt_title = 'Grep in Views',
         }
       end, { desc = '[R]ails grep [v]iews' })
 
       vim.keymap.set('n', '<leader>Rs', function()
-        builtin.live_grep { 
+        builtin.live_grep {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"app/services"},
-          prompt_title = "Grep in Services"
+          search_dirs = { 'app/services' },
+          prompt_title = 'Grep in Services',
         }
       end, { desc = '[R]ails grep [s]ervices' })
 
       vim.keymap.set('n', '<leader>Rt', function()
-        builtin.live_grep { 
+        builtin.live_grep {
           cwd = vim.fn.getcwd(),
-          search_dirs = {"spec"},
-          prompt_title = "Grep in Tests"
+          search_dirs = { 'spec' },
+          prompt_title = 'Grep in Tests',
         }
       end, { desc = '[R]ails grep [t]ests' })
     end,
@@ -1318,11 +1170,11 @@ require('lazy').setup({
               checkGemVersion = false,
               -- Exclude some directories to improve performance
               exclude = {
-                "spec/**/*",
-                "test/**/*", 
-                "tmp/**/*",
-                "vendor/**/*",
-                "node_modules/**/*"
+                'spec/**/*',
+                'test/**/*',
+                'tmp/**/*',
+                'vendor/**/*',
+                'node_modules/**/*',
               },
             },
           },
@@ -1573,7 +1425,24 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'ruby', 'javascript', 'typescript', 'json', 'yaml' },
+      ensure_installed = {
+        'bash',
+        'c',
+        'diff',
+        'html',
+        'lua',
+        'luadoc',
+        'markdown',
+        'markdown_inline',
+        'query',
+        'vim',
+        'vimdoc',
+        'ruby',
+        'javascript',
+        'typescript',
+        'json',
+        'yaml',
+      },
       -- Autoinstall languages that are not installed
       auto_install = true,
       -- ARM M2 optimization: compile parsers in parallel
@@ -1597,10 +1466,10 @@ require('lazy').setup({
       incremental_selection = {
         enable = true,
         keymaps = {
-          init_selection = "<C-space>",
-          node_incremental = "<C-space>",
-          scope_incremental = "<C-s>",
-          node_decremental = "<C-backspace>",
+          init_selection = '<C-space>',
+          node_incremental = '<C-space>',
+          scope_incremental = '<C-s>',
+          node_decremental = '<C-backspace>',
         },
       },
     },
@@ -1661,23 +1530,23 @@ require('lazy').setup({
 })
 
 -- ARM M2 macOS optimizations
-if vim.fn.has('macunix') == 1 and vim.fn.system('uname -m'):match('arm64') then
+if vim.fn.has 'macunix' == 1 and vim.fn.system('uname -m'):match 'arm64' then
   -- Optimize for Apple Silicon
   vim.opt.shell = '/bin/zsh'
-  
+
   -- Set better defaults for ARM M2
   vim.opt.lazyredraw = true
   vim.opt.regexpengine = 1
   vim.opt.synmaxcol = 200
-  
+
   -- LSP and completion optimizations
   vim.opt.updatetime = 100
   vim.opt.timeout = true
   vim.opt.timeoutlen = 300
-  
+
   -- Better file watching on macOS
   vim.opt.backupskip = '/tmp/*,/private/tmp/*'
-  
+
   -- Optimize for faster startup
   vim.loader.enable()
 end
