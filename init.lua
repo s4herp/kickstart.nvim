@@ -206,19 +206,6 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- Auto-format Ruby files with RuboCop on save (only if in mudango directory)
-vim.api.nvim_create_autocmd('BufWritePre', {
-  pattern = '*.rb',
-  group = ruby_augroup,
-  callback = function()
-    local file_path = vim.fn.expand '%:p'
-    if string.find(file_path, '/mudango/') then
-      -- Only format with RuboCop if we're in the mudango project
-      vim.cmd 'silent !docker compose exec web rubocop --auto-correct % 2>/dev/null || true'
-      vim.cmd 'edit!'
-    end
-  end,
-})
 
 -- RSpec specific settings
 vim.api.nvim_create_autocmd('BufRead', {
@@ -1233,20 +1220,7 @@ require('lazy').setup({
     },
     opts = {
       notify_on_error = false,
-      format_on_save = function(bufnr)
-        -- Disable "format_on_save lsp_fallback" for languages that don't
-        -- have a well standardized coding style. You can add additional
-        -- languages here or re-enable it for the disabled ones.
-        local disable_filetypes = { c = true, cpp = true }
-        if disable_filetypes[vim.bo[bufnr].filetype] then
-          return nil
-        else
-          return {
-            timeout_ms = 500,
-            lsp_format = 'fallback',
-          }
-        end
-      end,
+      format_on_save = false,
       formatters_by_ft = {
         lua = { 'stylua' },
         -- Conform can also run multiple formatters sequentially
