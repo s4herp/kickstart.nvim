@@ -61,5 +61,4 @@ ls.add_snippets('ruby', {
     t('scope :'), i(1, 'name'), t(', -> { '), i(2, 'where(...)'), t(' }'),
   }),
 })
-
 return {}
