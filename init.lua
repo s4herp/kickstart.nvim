@@ -227,6 +227,59 @@ vim.keymap.set('n', '<leader>dc', '<cmd>!docker compose exec web rails console<c
 vim.keymap.set('n', '<leader>dm', '<cmd>!docker compose exec web rails db:migrate<cr>', { desc = '[D]ocker [M]igrate' })
 vim.keymap.set('n', '<leader>ds', '<cmd>!docker compose exec web rails server<cr>', { desc = '[D]ocker [S]erver' })
 
+
+
+
+-- MUDANGO SPECIFIC NAVIGATION (usando <leader>E para "Edit specific")
+vim.keymap.set('n', '<leader>Es', function()
+  require('telescope.builtin').find_files { 
+    cwd = vim.fn.getcwd(),
+    search_dirs = {"app/services"},
+    prompt_title = "Edit Service"
+  }
+end, { desc = '[E]dit [S]ervice' })
+
+vim.keymap.set('n', '<leader>Ew', function()
+  require('telescope.builtin').find_files { 
+    cwd = vim.fn.getcwd(),
+    search_dirs = {"app/workers"},
+    prompt_title = "Edit Worker"
+  }
+end, { desc = '[E]dit [W]orker' })
+
+vim.keymap.set('n', '<leader>Ed', function()
+  require('telescope.builtin').find_files { 
+    cwd = vim.fn.getcwd(),
+    search_dirs = {"app/decorators"},
+    prompt_title = "Edit Decorator"
+  }
+end, { desc = '[E]dit [D]ecorator' })
+
+vim.keymap.set('n', '<leader>Ep', function()
+  require('telescope.builtin').find_files { 
+    cwd = vim.fn.getcwd(),
+    search_dirs = {"app/policies"},
+    prompt_title = "Edit Policy"
+  }
+end, { desc = '[E]dit [P]olicy' })
+
+vim.keymap.set('n', '<leader>Eq', function()
+  require('telescope.builtin').find_files { 
+    cwd = vim.fn.getcwd(),
+    search_dirs = {"app/queries"},
+    prompt_title = "Edit Query"
+  }
+end, { desc = '[E]dit [Q]uery' })
+
+-- RAILS CONFIG FILES (usando <leader>F para "Files")
+vim.keymap.set('n', '<leader>Fr', '<cmd>edit config/routes.rb<cr>', { desc = '[F]iles [R]outes' })
+vim.keymap.set('n', '<leader>Fa', '<cmd>edit config/application.rb<cr>', { desc = '[F]iles [A]pplication' })
+vim.keymap.set('n', '<leader>FG', '<cmd>edit Gemfile<cr>', { desc = '[F]iles [G]emfile' })
+vim.keymap.set('n', '<leader>FR', '<cmd>edit README.md<cr>', { desc = '[F]iles [R]eadme' })
+vim.keymap.set('n', '<leader>Fe', '<cmd>edit .env<cr>', { desc = '[F]iles [E]nv' })
+vim.keymap.set('n', '<leader>FD', '<cmd>edit docker-compose.yml<cr>', { desc = '[F]iles [D]ocker' })
+vim.keymap.set('n', '<leader>FC', '<cmd>edit CLAUDE.md<cr>', { desc = '[F]iles [C]laude' })
+
 -- NOTE: Some terminals have colliding keymaps or are not able to send distinct keycodes
 -- vim.keymap.set("n", "<C-S-h>", "<C-w>H", { desc = "Move window to the left" })
 -- vim.keymap.set("n", "<C-S-l>", "<C-w>L", { desc = "Move window to the right" })
@@ -542,7 +595,11 @@ require('lazy').setup({
         { '<leader>g', group = '[G]it' },
         { '<leader>b', group = '[B]uffer' },
         { '<leader>d', group = '[D]ocker' },
-        { '<leader>r', group = '[R]spec (buffer local)' },
+        { '<leader>r', group = '[R]elated' },
+        { '<leader>e', group = '[E]dit Rails' },
+        { '<leader>R', group = '[R]ails' },
+        { '<leader>E', group = '[E]dit Specific' },
+        { '<leader>A', group = '[A]lternative' },
       },
     },
   },
@@ -875,6 +932,128 @@ require('lazy').setup({
           prompt_title = "Find Ruby Files"
         }
       end, { desc = '[S]earch R[u]by files' })
+
+      -- RAILS SPECIFIC SEARCHES - Extended (usando <leader>R para "Rails")
+      vim.keymap.set('n', '<leader>RM', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/models"},
+          prompt_title = "Rails Models"
+        }
+      end, { desc = '[R]ails [M]odels' })
+
+      vim.keymap.set('n', '<leader>RC', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/controllers"},
+          prompt_title = "Rails Controllers"
+        }
+      end, { desc = '[R]ails [C]ontrollers' })
+
+      vim.keymap.set('n', '<leader>RV', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/views"},
+          prompt_title = "Rails Views"
+        }
+      end, { desc = '[R]ails [V]iews' })
+
+      vim.keymap.set('n', '<leader>RS', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/services"},
+          prompt_title = "Rails Services"
+        }
+      end, { desc = '[R]ails [S]ervices' })
+
+      vim.keymap.set('n', '<leader>RJ', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/jobs"},
+          prompt_title = "Rails Jobs"
+        }
+      end, { desc = '[R]ails [J]obs' })
+
+      vim.keymap.set('n', '<leader>RH', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/helpers"},
+          prompt_title = "Rails Helpers"
+        }
+      end, { desc = '[R]ails [H]elpers' })
+
+      vim.keymap.set('n', '<leader>RL', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"lib"},
+          prompt_title = "Rails Lib"
+        }
+      end, { desc = '[R]ails [L]ib' })
+
+      vim.keymap.set('n', '<leader>RF', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"spec/factories"},
+          prompt_title = "Rails Factories"
+        }
+      end, { desc = '[R]ails [F]actories' })
+
+      vim.keymap.set('n', '<leader>RR', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"config/routes"},
+          prompt_title = "Rails Routes"
+        }
+      end, { desc = '[R]ails [R]outes' })
+
+      vim.keymap.set('n', '<leader>RI', function()
+        builtin.find_files { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"config/initializers"},
+          prompt_title = "Rails Initializers"
+        }
+      end, { desc = '[R]ails [I]nitializers' })
+
+      -- RAILS CONTENT SEARCHES (grep in Rails directories)
+      vim.keymap.set('n', '<leader>Rm', function()
+        builtin.live_grep { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/models"},
+          prompt_title = "Grep in Models"
+        }
+      end, { desc = '[R]ails grep [m]odels' })
+
+      vim.keymap.set('n', '<leader>Rc', function()
+        builtin.live_grep { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/controllers"},
+          prompt_title = "Grep in Controllers"
+        }
+      end, { desc = '[R]ails grep [c]ontrollers' })
+
+      vim.keymap.set('n', '<leader>Rv', function()
+        builtin.live_grep { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/views"},
+          prompt_title = "Grep in Views"
+        }
+      end, { desc = '[R]ails grep [v]iews' })
+
+      vim.keymap.set('n', '<leader>Rs', function()
+        builtin.live_grep { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"app/services"},
+          prompt_title = "Grep in Services"
+        }
+      end, { desc = '[R]ails grep [s]ervices' })
+
+      vim.keymap.set('n', '<leader>Rt', function()
+        builtin.live_grep { 
+          cwd = vim.fn.getcwd(),
+          search_dirs = {"spec"},
+          prompt_title = "Grep in Tests"
+        }
+      end, { desc = '[R]ails grep [t]ests' })
     end,
   },
 
