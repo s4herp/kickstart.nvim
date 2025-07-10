@@ -106,56 +106,7 @@ return {
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
 
-      -- Ruby/Rails specific searches
-      vim.keymap.set('n', '<leader>sm', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/models' },
-          prompt_title = 'Find Models',
-        }
-      end, { desc = '[S]earch [M]odels' })
-
-      vim.keymap.set('n', '<leader>sc', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/controllers' },
-          prompt_title = 'Find Controllers',
-        }
-      end, { desc = '[S]earch [C]ontrollers' })
-
-      vim.keymap.set('n', '<leader>sv', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/views' },
-          prompt_title = 'Find Views',
-        }
-      end, { desc = '[S]earch [V]iews' })
-
-      vim.keymap.set('n', '<leader>st', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'spec' },
-          prompt_title = 'Find Tests',
-        }
-      end, { desc = '[S]earch [T]ests' })
-
-      vim.keymap.set('n', '<leader>sj', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/jobs' },
-          prompt_title = 'Find Jobs',
-        }
-      end, { desc = '[S]earch [J]obs' })
-
-      vim.keymap.set('n', '<leader>si', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'db/migrate' },
-          prompt_title = 'Find Migrations',
-        }
-      end, { desc = '[S]earch M[i]grations' })
-
-      -- Search for Ruby files only
+      -- Basic Rails file searches (keeping only essential ones to avoid conflicts)
       vim.keymap.set('n', '<leader>su', function()
         builtin.find_files {
           cwd = vim.fn.getcwd(),

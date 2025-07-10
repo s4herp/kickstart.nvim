@@ -319,35 +319,13 @@ return {
             -- Enable completion triggered by <c-x><c-o>
             vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
             
-            -- Enhanced keymaps for Ruby/Rails development
+            -- Ruby-specific enhancements (don't override global LSP keymaps)
             local opts = { noremap = true, silent = true, buffer = bufnr }
             
-            -- Rails-specific navigation (enhanced with Solargraph)
-            vim.keymap.set('n', 'gd', function()
-              vim.lsp.buf.definition()
-            end, vim.tbl_extend('force', opts, { desc = 'Go to definition' }))
-            
-            vim.keymap.set('n', 'gr', function()
-              require('telescope.builtin').lsp_references()
-            end, vim.tbl_extend('force', opts, { desc = 'Show references' }))
-            
-            vim.keymap.set('n', 'K', function()
-              vim.lsp.buf.hover()
-            end, vim.tbl_extend('force', opts, { desc = 'Show hover documentation' }))
-            
-            -- Ruby method signature help
-            vim.keymap.set('i', '<C-k>', function()
+            -- Ruby method signature help (enhanced for Ruby)
+            vim.keymap.set('i', '<C-s>', function()
               vim.lsp.buf.signature_help()
-            end, vim.tbl_extend('force', opts, { desc = 'Signature help' }))
-            
-            -- Enhanced diagnostics for Ruby
-            vim.keymap.set('n', '[d', function()
-              vim.diagnostic.goto_prev()
-            end, vim.tbl_extend('force', opts, { desc = 'Previous diagnostic' }))
-            
-            vim.keymap.set('n', ']d', function()
-              vim.diagnostic.goto_next()
-            end, vim.tbl_extend('force', opts, { desc = 'Next diagnostic' }))
+            end, vim.tbl_extend('force', opts, { desc = 'Ruby signature help' }))
           end,
         },
       }
