@@ -4,7 +4,10 @@
       "Bash(grep:*)",
       "Bash(nvim:*)",
       "Bash(find:*)",
-      "Bash(ls:*)"
+      "Bash(ls:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)"
     ],
     "deny": []
-  }}
+  }
+}
