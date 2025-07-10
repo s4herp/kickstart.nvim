@@ -375,6 +375,7 @@ require('lazy').setup({
         { '<leader>E', group = '[E]dit Specific' },
         { '<leader>F', group = '[F]iles' },
         { '<leader>A', group = '[A]lternative' },
+        { '<leader>y', group = '[Y]ank' },
       },
     },
   },

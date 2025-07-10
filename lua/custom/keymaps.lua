@@ -30,6 +30,25 @@ function M.setup()
   -- Editing helpers
   map('n', '<leader>a', 'ggVG', { desc = 'Select [A]ll' })
 
+  -- File path utilities
+  map('n', '<leader>yp', function()
+    local path = vim.fn.expand('%:.')
+    vim.fn.setreg('+', path)
+    vim.notify('Copied relative path: ' .. path, vim.log.levels.INFO)
+  end, { desc = '[Y]ank relative [P]ath' })
+
+  map('n', '<leader>yP', function()
+    local path = vim.fn.expand('%:p')
+    vim.fn.setreg('+', path)
+    vim.notify('Copied full path: ' .. path, vim.log.levels.INFO)
+  end, { desc = '[Y]ank full [P]ath' })
+
+  map('n', '<leader>yf', function()
+    local filename = vim.fn.expand('%:t')
+    vim.fn.setreg('+', filename)
+    vim.notify('Copied filename: ' .. filename, vim.log.levels.INFO)
+  end, { desc = '[Y]ank [F]ilename' })
+
   -- Docker commands
   map('n', '<leader>dr', '<cmd>!docker compose exec web bin/rspec<cr>', { desc = '[D]ocker [R]spec all' })
   map('n', '<leader>drf', '<cmd>!docker compose exec web bin/rspec %<cr>', { desc = '[D]ocker [R]spec [F]ile' })
