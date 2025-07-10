@@ -229,36 +229,126 @@ return {
 
         solargraph = {
           cmd = { '/Users/saherpinero/.rbenv/shims/solargraph', 'stdio' },
+          filetypes = { 'ruby' },
+          root_dir = function()
+            return vim.fn.getcwd()
+          end,
+          init_options = {
+            formatting = true,
+          },
           settings = {
             solargraph = {
+              -- Core features
               diagnostics = true,
               formatting = true,
-              useBundler = true, -- Enable bundler for better dependency resolution
               completion = true,
               hover = true,
               references = true,
               rename = true,
               symbols = true,
               definitions = true,
+              signatureHelp = true,
+              
+              -- Bundler and dependency management
+              useBundler = true,
+              bundlerPath = 'bundle',
+              
+              -- Rails integration
+              rails = true,
+              
+              -- Logging and debugging
               logLevel = 'warn',
-              -- Ruby version specific settings
+              transport = 'stdio',
+              
+              -- Performance optimizations for large Rails projects
+              checkGemVersion = false,
+              commandPath = '/Users/saherpinero/.rbenv/shims/solargraph',
+              
+              -- Enhanced Ruby analysis
               reportErrors = 'typed',
               castExpression = 'typed',
-              -- Rails specific settings
-              rails = true,
-              -- Performance optimizations for large Rails projects
-              transport = 'stdio',
-              checkGemVersion = false,
-              -- Exclude some directories to improve performance
+              typeInferenceMethod = 'ruby',
+              
+              -- Improved completion settings
+              autoformat = false, -- Disable auto-format to avoid conflicts
+              
+              -- Exclude directories for better performance
               exclude = {
                 'spec/**/*',
                 'test/**/*',
+                'features/**/*',
                 'tmp/**/*',
                 'vendor/**/*',
                 'node_modules/**/*',
+                'coverage/**/*',
+                'log/**/*',
+                '.git/**/*',
+                'public/**/*',
+                'storage/**/*',
+              },
+              
+              -- Include important directories
+              include = {
+                'app/**/*',
+                'lib/**/*',
+                'config/**/*',
+                'db/**/*',
+                'Gemfile',
+                'Rakefile',
+                '*.rb',
+              },
+              
+              -- Enhanced workspace configuration
+              workspace = {
+                symbols = {
+                  showHidden = false,
+                },
+              },
+              
+              -- Folding support
+              folding = true,
+              
+              -- Document formatting
+              format = {
+                enable = true,
               },
             },
           },
+          -- Enhanced capabilities for better Rails development
+          on_attach = function(client, bufnr)
+            -- Enable completion triggered by <c-x><c-o>
+            vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
+            
+            -- Enhanced keymaps for Ruby/Rails development
+            local opts = { noremap = true, silent = true, buffer = bufnr }
+            
+            -- Rails-specific navigation (enhanced with Solargraph)
+            vim.keymap.set('n', 'gd', function()
+              vim.lsp.buf.definition()
+            end, vim.tbl_extend('force', opts, { desc = 'Go to definition' }))
+            
+            vim.keymap.set('n', 'gr', function()
+              require('telescope.builtin').lsp_references()
+            end, vim.tbl_extend('force', opts, { desc = 'Show references' }))
+            
+            vim.keymap.set('n', 'K', function()
+              vim.lsp.buf.hover()
+            end, vim.tbl_extend('force', opts, { desc = 'Show hover documentation' }))
+            
+            -- Ruby method signature help
+            vim.keymap.set('i', '<C-k>', function()
+              vim.lsp.buf.signature_help()
+            end, vim.tbl_extend('force', opts, { desc = 'Signature help' }))
+            
+            -- Enhanced diagnostics for Ruby
+            vim.keymap.set('n', '[d', function()
+              vim.diagnostic.goto_prev()
+            end, vim.tbl_extend('force', opts, { desc = 'Previous diagnostic' }))
+            
+            vim.keymap.set('n', ']d', function()
+              vim.diagnostic.goto_next()
+            end, vim.tbl_extend('force', opts, { desc = 'Next diagnostic' }))
+          end,
         },
       }
 
