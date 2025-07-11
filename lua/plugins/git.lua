@@ -75,6 +75,23 @@ return {
           end
         end, { desc = 'Previous Git hunk' })
 
+        -- Navigation alternativa (más cómoda para teclado español)
+        map('n', '<leader>gj', function()
+          if vim.wo.diff then
+            vim.cmd.normal { ']c', bang = true }
+          else
+            gitsigns.nav_hunk 'next'
+          end
+        end, { desc = 'Next Git hunk' })
+
+        map('n', '<leader>gk', function()
+          if vim.wo.diff then
+            vim.cmd.normal { '[c', bang = true }
+          else
+            gitsigns.nav_hunk 'prev'
+          end
+        end, { desc = 'Previous Git hunk' })
+
         -- Actions
         map('n', '<leader>hs', gitsigns.stage_hunk, { desc = 'Stage hunk' })
         map('n', '<leader>hr', gitsigns.reset_hunk, { desc = 'Reset hunk' })
