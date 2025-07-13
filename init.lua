@@ -9,7 +9,6 @@ require 'core.autocmds'   -- Basic autocommands
 
 -- Plugin configuration
 require 'config.lazy'     -- Plugin manager and plugin loading
-require 'config.lsp'      -- LSP configuration
 
 -- Load custom keymaps from existing custom directory
 -- This maintains backwards compatibility with the existing setup

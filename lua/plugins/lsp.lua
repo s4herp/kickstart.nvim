@@ -248,30 +248,30 @@ return {
               symbols = true,
               definitions = true,
               signatureHelp = true,
-              
+
               -- Bundler and dependency management
               useBundler = true,
               bundlerPath = 'bundle',
-              
+
               -- Rails integration
               rails = true,
-              
+
               -- Logging and debugging
               logLevel = 'warn',
               transport = 'stdio',
-              
+
               -- Performance optimizations for large Rails projects
               checkGemVersion = false,
               commandPath = '/Users/saherpinero/.rbenv/shims/solargraph',
-              
+
               -- Enhanced Ruby analysis
               reportErrors = 'typed',
               castExpression = 'typed',
               typeInferenceMethod = 'ruby',
-              
+
               -- Improved completion settings
               autoformat = false, -- Disable auto-format to avoid conflicts
-              
+
               -- Exclude directories for better performance
               exclude = {
                 'spec/**/*',
@@ -286,7 +286,7 @@ return {
                 'public/**/*',
                 'storage/**/*',
               },
-              
+
               -- Include important directories
               include = {
                 'app/**/*',
@@ -297,17 +297,17 @@ return {
                 'Rakefile',
                 '*.rb',
               },
-              
+
               -- Enhanced workspace configuration
               workspace = {
                 symbols = {
                   showHidden = false,
                 },
               },
-              
+
               -- Folding support
               folding = true,
-              
+
               -- Document formatting
               format = {
                 enable = true,
@@ -318,10 +318,10 @@ return {
           on_attach = function(client, bufnr)
             -- Enable completion triggered by <c-x><c-o>
             vim.api.nvim_buf_set_option(bufnr, 'omnifunc', 'v:lua.vim.lsp.omnifunc')
-            
+
             -- Ruby-specific enhancements (don't override global LSP keymaps)
             local opts = { noremap = true, silent = true, buffer = bufnr }
-            
+
             -- Ruby method signature help (enhanced for Ruby)
             vim.keymap.set('i', '<C-s>', function()
               vim.lsp.buf.signature_help()
@@ -379,3 +379,4 @@ return {
     },
   },
 }
+
