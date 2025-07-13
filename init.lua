@@ -4,7 +4,6 @@
 
 -- Core configuration
 require 'core.options'    -- Basic vim options and settings
-require 'core.keymaps'    -- Basic keymaps (non-plugin specific)
 require 'core.autocmds'   -- Basic autocommands
 
 -- Plugin configuration
