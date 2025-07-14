@@ -140,46 +140,22 @@ return {
     },
     opts = {},
   },
-
-  -- Neogit (git interface)
+  -- LazyGit (git UI)
   {
-    'NeogitOrg/neogit',
+    'kdheepak/lazygit.nvim',
+    lazy = true,
+    cmd = {
+      'LazyGit',
+      'LazyGitConfig',
+      'LazyGitCurrentFile',
+      'LazyGitFilter',
+      'LazyGitFilterCurrentFile',
+    },
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'sindrets/diffview.nvim',
-      'nvim-telescope/telescope.nvim',
     },
-    cmd = 'Neogit',
     keys = {
-      { '<leader>gs', '<cmd>Neogit<cr>', desc = 'Git Status' },
-      { '<leader>gg', '<cmd>Neogit<cr>', desc = 'Git Status' },
+      { '<leader>lg', '<cmd>LazyGit<cr>', desc = 'LazyGit' },
     },
-    config = function()
-      require('neogit').setup {
-        -- Basic configuration
-        disable_hint = false,
-        disable_context_highlighting = false,
-        disable_signs = false,
-
-        -- Auto refresh
-        auto_refresh = true,
-
-        -- Sorting
-        sort_branches = '-committerdate',
-
-        -- Opening configuration
-        kind = 'tab',
-
-        -- Integrations
-        integrations = {
-          diffview = true,
-          telescope = true,
-        },
-
-        -- Console timeout
-        console_timeout = 2000,
-        auto_show_console = true,
-      }
-    end,
   },
 }
