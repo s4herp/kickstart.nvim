@@ -49,6 +49,28 @@ return {
       -- [[ Configure Telescope ]]
       -- See `:help telescope` and `:help telescope.setup()`
       require('telescope').setup {
+        pickers = {
+          live_grep = {
+            file_ignore_patterns = {
+              -- Ignore these files when searching with live_grep
+              'node_modules',
+              '.git/',
+              'vendor/',
+              'tmp/',
+              'log/',
+              'coverage/',
+            },
+            additional_args = function(_)
+              return { '--hidden' }
+            end,
+          },
+          -- You can configure Telescope pickers here.
+          --  See `:help telescope.pickers` for more information.
+          --  This is where you can set up default options for each picker.
+          --
+          -- For example, to set the default layout strategy to 'vertical':
+          --   defaults = { layout_strategy = 'vertical' }
+        },
         -- You can put your default mappings / updates / etc. in here
         --  All the info you're looking for is in `:help telescope.setup()`
         --
@@ -57,7 +79,6 @@ return {
         --     i = { ['<c-enter>'] = 'to_fuzzy_refine' },
         --   },
         -- },
-        -- pickers = {}
         extensions = {
           ['ui-select'] = {
             require('telescope.themes').get_dropdown(),
@@ -346,6 +367,19 @@ return {
     --    - Incremental selection: Included, see `:help nvim-treesitter-incremental-selection-mod`
     --    - Show your current context: https://github.com/nvim-treesitter/nvim-treesitter-context
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
+  },
+
+  -- Treesitter Context (shows context of current node)
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    dependencies = 'nvim-treesitter/nvim-treesitter',
+    config = function()
+      require('treesitter-context').setup {
+        enable = true,
+        max_lines = 3,
+        mode = 'cursor',
+      }
+    end,
   },
 
   -- Autocompletion
