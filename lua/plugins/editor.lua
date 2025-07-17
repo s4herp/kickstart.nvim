@@ -382,6 +382,18 @@ return {
     end,
   },
 
+  -- Treesitter Context (shows context of current node)
+  {
+    'nvim-treesitter/nvim-treesitter-context',
+    config = function()
+      require('treesitter-context').setup {
+        max_lines = 0, -- Sin límite de líneas
+        line_numbers = true, -- Mostrar números de línea en el contexto
+        mode = 'topline', -- Puede ser 'cursor' o 'topline'
+      }
+    end,
+  },
+
   -- Autocompletion
   {
     'saghen/blink.cmp',
