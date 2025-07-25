@@ -53,54 +53,6 @@ function M.setup()
     vim.fn.setreg('+', filename)
     vim.notify('Copied filename: ' .. filename, vim.log.levels.INFO)
   end, { desc = '[Y]ank [F]ilename' })
-
-
-  -- Enhanced Rails Navigation (custom project feature)
-  local rails_nav = require 'core.rails_nav'
-
-  -- Quick navigation between related files
-  map('n', '<leader>rm', function()
-    rails_nav.go_to_model()
-  end, { desc = '[R]ails go to [M]odel' })
-  map('n', '<leader>rc', function()
-    rails_nav.go_to_controller()
-  end, { desc = '[R]ails go to [C]ontroller' })
-  map('n', '<leader>rv', function()
-    rails_nav.go_to_view()
-  end, { desc = '[R]ails go to [V]iew' })
-  map('n', '<leader>rt', function()
-    rails_nav.go_to_test()
-  end, { desc = '[R]ails go to [T]est' })
-
-  -- Smart file cycling
-  map('n', '<leader>rr', function()
-    rails_nav.cycle_related_files()
-  end, { desc = '[R]ails cycle [R]elated files' })
-
-  -- Rails project utilities
-  map('n', '<leader>rC', function()
-    rails_nav.open_rails_console()
-  end, { desc = '[R]ails open [C]onsole' })
-  map('n', '<leader>rS', function()
-    rails_nav.start_rails_server()
-  end, { desc = '[R]ails start [S]erver' })
-  map('n', '<leader>rM', function()
-    rails_nav.run_migrations()
-  end, { desc = '[R]ails run [M]igrations' })
-  map('n', '<leader>rR', function()
-    rails_nav.show_routes()
-  end, { desc = '[R]ails show [R]outes' })
-  map('n', '<leader>rG', function()
-    rails_nav.open_gemfile()
-  end, { desc = '[R]ails open [G]emfile' })
-  map('n', '<leader>ro', function()
-    rails_nav.open_routes()
-  end, { desc = '[R]ails [o]pen routes.rb' })
-
-  -- Enhanced file finding with Rails context
-  map('n', '<leader>rf', function()
-    rails_nav.find_rails_files()
-  end, { desc = '[R]ails [f]ind contextual files' })
 end
 
 return M

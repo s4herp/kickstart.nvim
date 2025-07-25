@@ -31,17 +31,6 @@ vim.api.nvim_create_autocmd('FileType', {
   end,
 })
 
--- RSpec specific settings
-vim.api.nvim_create_autocmd('BufRead', {
-  pattern = '*_spec.rb',
-  group = ruby_augroup,
-  callback = function()
-    -- Set local keymaps for RSpec files
-    vim.keymap.set('n', '<leader>rs', '<cmd>!docker compose exec web bin/rspec %<cr>', { desc = '[R]spec [S]ingle file', buffer = true })
-    vim.keymap.set('n', '<leader>rl', '<cmd>!docker compose exec web bin/rspec %:<C-r>=line(".")<cr><cr>', { desc = '[R]spec [L]ine', buffer = true })
-  end,
-})
-
 -- Elixir/Phoenix specific autocommands
 local elixir_augroup = vim.api.nvim_create_augroup('elixir-phoenix-config', { clear = true })
 
