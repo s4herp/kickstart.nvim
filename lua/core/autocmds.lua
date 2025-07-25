@@ -41,3 +41,32 @@ vim.api.nvim_create_autocmd('BufRead', {
     vim.keymap.set('n', '<leader>rl', '<cmd>!docker compose exec web bin/rspec %:<C-r>=line(".")<cr><cr>', { desc = '[R]spec [L]ine', buffer = true })
   end,
 })
+
+-- Elixir/Phoenix specific autocommands
+local elixir_augroup = vim.api.nvim_create_augroup('elixir-phoenix-config', { clear = true })
+
+-- Set specific options for Elixir files
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = { 'elixir', 'eelixir', 'heex' },
+  group = elixir_augroup,
+  callback = function()
+    vim.opt_local.shiftwidth = 2
+    vim.opt_local.tabstop = 2
+    vim.opt_local.expandtab = true
+    vim.opt_local.softtabstop = 2
+    -- Enable spell checking for comments in Elixir files
+    vim.opt_local.spell = true
+    vim.opt_local.spelllang = 'en_us'
+  end,
+})
+
+-- ExUnit test specific settings
+vim.api.nvim_create_autocmd('BufRead', {
+  pattern = '*_test.exs',
+  group = elixir_augroup,
+  callback = function()
+    -- Set local keymaps for ExUnit test files
+    vim.keymap.set('n', '<leader>es', '<cmd>!mix test %<cr>', { desc = '[E]xunit [S]ingle file', buffer = true })
+    vim.keymap.set('n', '<leader>el', '<cmd>!mix test %:<C-r>=line(".")<cr><cr>', { desc = '[E]xunit [L]ine', buffer = true })
+  end,
+})
