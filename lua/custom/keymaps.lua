@@ -54,16 +54,6 @@ function M.setup()
     vim.notify('Copied filename: ' .. filename, vim.log.levels.INFO)
   end, { desc = '[Y]ank [F]ilename' })
 
-  -- Docker commands (project-specific)
-  map('n', '<leader>dr', '<cmd>!docker compose exec web bin/rspec<cr>', { desc = '[D]ocker [R]spec all' })
-  map('n', '<leader>drf', '<cmd>!docker compose exec web bin/rspec %<cr>', { desc = '[D]ocker [R]spec [F]ile' })
-  map('n', '<leader>drl', '<cmd>!docker compose exec web bin/rspec %:<C-r>=line(".")<cr><cr>', { desc = '[D]ocker [R]spec [L]ine' })
-  map('n', '<leader>drc', '<cmd>!docker compose exec web rubocop<cr>', { desc = '[D]ocker [R]ubocop all' })
-  map('n', '<leader>drcf', '<cmd>!docker compose exec web rubocop %<cr>', { desc = '[D]ocker [R]ubocop [F]ile' })
-  map('n', '<leader>drca', '<cmd>!docker compose exec web rubocop --auto-correct<cr>', { desc = '[D]ocker [R]ubocop [A]uto-correct' })
-  map('n', '<leader>dc', '<cmd>!docker compose exec web rails console<cr>', { desc = '[D]ocker [C]onsole' })
-  map('n', '<leader>dm', '<cmd>!docker compose exec web rails db:migrate<cr>', { desc = '[D]ocker [M]igrate' })
-  map('n', '<leader>ds', '<cmd>!docker compose exec web rails server<cr>', { desc = '[D]ocker [S]erver' })
 
   -- Enhanced Rails Navigation (custom project feature)
   local rails_nav = require 'core.rails_nav'
