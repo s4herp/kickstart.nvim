@@ -128,136 +128,79 @@ return {
         builtin.find_files { cwd = vim.fn.stdpath 'config' }
       end, { desc = '[S]earch [N]eovim files' })
 
-      -- Basic Rails file searches (keeping only essential ones to avoid conflicts)
-      vim.keymap.set('n', '<leader>su', function()
+      -- ELIXIR/PHOENIX SEARCHES (using <leader>e for "Elixir")
+      -- Find files
+      vim.keymap.set('n', '<leader>ef', function()
         builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          find_command = { 'find', '.', '-name', '*.rb', '-type', 'f' },
-          prompt_title = 'Find Ruby Files',
+          find_command = { 'fd', '--type', 'f', '--extension', 'ex', '--extension', 'exs', '--extension', 'heex' },
+          prompt_title = 'Find Elixir Files',
         }
-      end, { desc = '[S]earch R[u]by files' })
+      end, { desc = '[E]lixir find [f]iles' })
 
-      -- RAILS SPECIFIC SEARCHES - Extended (using <leader>R for "Rails")
-      vim.keymap.set('n', '<leader>RM', function()
+      vim.keymap.set('n', '<leader>eL', function()
         builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/models' },
-          prompt_title = 'Rails Models',
-        }
-      end, { desc = '[R]ails [M]odels' })
-
-      vim.keymap.set('n', '<leader>RC', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/controllers' },
-          prompt_title = 'Rails Controllers',
-        }
-      end, { desc = '[R]ails [C]ontrollers' })
-
-      vim.keymap.set('n', '<leader>RV', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/views' },
-          prompt_title = 'Rails Views',
-        }
-      end, { desc = '[R]ails [V]iews' })
-
-      vim.keymap.set('n', '<leader>RS', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/services' },
-          prompt_title = 'Rails Services',
-        }
-      end, { desc = '[R]ails [S]ervices' })
-
-      vim.keymap.set('n', '<leader>RJ', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/jobs' },
-          prompt_title = 'Rails Jobs',
-        }
-      end, { desc = '[R]ails [J]obs' })
-
-      vim.keymap.set('n', '<leader>RH', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/helpers' },
-          prompt_title = 'Rails Helpers',
-        }
-      end, { desc = '[R]ails [H]elpers' })
-
-      vim.keymap.set('n', '<leader>RL', function()
-        builtin.find_files {
-          cwd = vim.fn.getcwd(),
           search_dirs = { 'lib' },
-          prompt_title = 'Rails Lib',
+          prompt_title = 'Phoenix Lib (source)',
         }
-      end, { desc = '[R]ails [L]ib' })
+      end, { desc = '[E]lixir [L]ib files' })
 
-      vim.keymap.set('n', '<leader>RF', function()
+      vim.keymap.set('n', '<leader>eT', function()
         builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'spec/factories' },
-          prompt_title = 'Rails Factories',
+          search_dirs = { 'test' },
+          prompt_title = 'Phoenix Tests',
         }
-      end, { desc = '[R]ails [F]actories' })
+      end, { desc = '[E]lixir [T]est files' })
 
-      vim.keymap.set('n', '<leader>RR', function()
+      vim.keymap.set('n', '<leader>ec', function()
         builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'config/routes' },
-          prompt_title = 'Rails Routes',
+          search_dirs = { 'lib' },
+          find_command = { 'fd', '--type', 'f', 'controller' },
+          prompt_title = 'Phoenix Controllers',
         }
-      end, { desc = '[R]ails [R]outes' })
+      end, { desc = '[E]lixir [c]ontrollers' })
 
-      vim.keymap.set('n', '<leader>RI', function()
+      vim.keymap.set('n', '<leader>ev', function()
         builtin.find_files {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'config/initializers' },
-          prompt_title = 'Rails Initializers',
+          find_command = { 'fd', '--type', 'f', '--extension', 'heex' },
+          prompt_title = 'Phoenix Templates (heex)',
         }
-      end, { desc = '[R]ails [I]nitializers' })
+      end, { desc = '[E]lixir [v]iews/templates' })
 
-      -- RAILS CONTENT SEARCHES (grep in Rails directories)
-      vim.keymap.set('n', '<leader>Rm', function()
-        builtin.live_grep {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/models' },
-          prompt_title = 'Grep in Models',
+      vim.keymap.set('n', '<leader>em', function()
+        builtin.find_files {
+          search_dirs = { 'priv/repo/migrations' },
+          prompt_title = 'Ecto Migrations',
         }
-      end, { desc = '[R]ails grep [m]odels' })
+      end, { desc = '[E]lixir [m]igrations' })
 
-      vim.keymap.set('n', '<leader>Rc', function()
-        builtin.live_grep {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/controllers' },
-          prompt_title = 'Grep in Controllers',
+      vim.keymap.set('n', '<leader>er', function()
+        builtin.find_files {
+          find_command = { 'fd', '--type', 'f', 'router' },
+          prompt_title = 'Phoenix Router',
         }
-      end, { desc = '[R]ails grep [c]ontrollers' })
+      end, { desc = '[E]lixir [r]outer' })
 
-      vim.keymap.set('n', '<leader>Rv', function()
+      -- Grep in specific directories
+      vim.keymap.set('n', '<leader>egl', function()
         builtin.live_grep {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/views' },
-          prompt_title = 'Grep in Views',
+          search_dirs = { 'lib' },
+          prompt_title = 'Grep in Lib',
         }
-      end, { desc = '[R]ails grep [v]iews' })
+      end, { desc = '[E]lixir [g]rep [l]ib' })
 
-      vim.keymap.set('n', '<leader>Rs', function()
+      vim.keymap.set('n', '<leader>egt', function()
         builtin.live_grep {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'app/services' },
-          prompt_title = 'Grep in Services',
-        }
-      end, { desc = '[R]ails grep [s]ervices' })
-
-      vim.keymap.set('n', '<leader>Rt', function()
-        builtin.live_grep {
-          cwd = vim.fn.getcwd(),
-          search_dirs = { 'spec' },
+          search_dirs = { 'test' },
           prompt_title = 'Grep in Tests',
         }
-      end, { desc = '[R]ails grep [t]ests' })
+      end, { desc = '[E]lixir [g]rep [t]ests' })
+
+      vim.keymap.set('n', '<leader>egc', function()
+        builtin.live_grep {
+          search_dirs = { 'config' },
+          prompt_title = 'Grep in Config',
+        }
+      end, { desc = '[E]lixir [g]rep [c]onfig' })
     end,
   },
   {
@@ -341,10 +284,7 @@ return {
       sync_install = false,
       highlight = {
         enable = true,
-        -- Some languages depend on vim's regex highlighting system (such as Ruby) for indent rules.
-        --  If you are experiencing weird indenting issues, add the language to
-        --  the list of additional_vim_regex_highlighting and disabled languages for indent.
-        additional_vim_regex_highlighting = { 'ruby' },
+        additional_vim_regex_highlighting = false,
         -- Disable for large files to improve performance
         disable = function(_lang, buf)
           local max_filesize = 100 * 1024 -- 100 KB
@@ -354,7 +294,7 @@ return {
           end
         end,
       },
-      indent = { enable = true, disable = { 'ruby' } },
+      indent = { enable = true },
       incremental_selection = {
         enable = true,
         keymaps = {

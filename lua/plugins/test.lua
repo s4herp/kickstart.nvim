@@ -20,7 +20,6 @@ return {
         keep_one = true,          -- keep only one terminal for testing
       },
       runners = {
-        ruby = 'nvim-test.runners.rspec',
         elixir = 'nvim-test.runners.mix',
       },
     }

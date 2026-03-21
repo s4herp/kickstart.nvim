@@ -1,10 +1,4 @@
 -- [[ Ruby/Rails Plugins ]]
--- Ruby-specific plugins and configuration
+-- Kept minimal for occasional Ruby work
 
-return {
-  -- Rails navigation
-  {
-    'tpope/vim-rails',
-    ft = 'ruby',
-  },
-}
+return {}
