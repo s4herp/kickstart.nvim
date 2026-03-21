@@ -11,8 +11,8 @@ vim.g.maplocalleader = ' '
 vim.g.have_nerd_font = true
 
 -- Provider configurations
-vim.g.python3_host_prog = '/Users/saherpinero/.pyenv/versions/3.10.14/bin/python3'
-vim.g.ruby_host_prog = '/Users/saherpinero/.rbenv/shims/ruby'
+vim.g.python3_host_prog = vim.fn.expand('~/.asdf/shims/python')
+vim.g.ruby_host_prog = vim.fn.expand('~/.asdf/shims/ruby')
 vim.g.loaded_perl_provider = 0
 
 -- Core options
