@@ -114,6 +114,23 @@ return {
           gitsigns.diffthis '~'
         end, { desc = 'Diff this ~' })
 
+        -- Change comparison base
+        map('n', '<leader>gm', function()
+          gitsigns.change_base('main', true)
+        end, { desc = 'Compare with main' })
+        map('n', '<leader>gM', function()
+          gitsigns.change_base('master', true)
+        end, { desc = 'Compare with master' })
+        map('n', '<leader>gH', function()
+          gitsigns.change_base('HEAD', true)
+        end, { desc = 'Compare with HEAD (default)' })
+        map('n', '<leader>gB', function()
+          local branch = vim.fn.input('Compare with branch: ')
+          if branch ~= '' then
+            gitsigns.change_base(branch, true)
+          end
+        end, { desc = 'Compare with custom branch' })
+
         -- Text object
         map({ 'o', 'x' }, 'ih', ':<C-U>Gitsigns select_hunk<CR>', { desc = 'Select hunk' })
       end,

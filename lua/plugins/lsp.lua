@@ -244,7 +244,6 @@ return {
       local ensure_installed = vim.tbl_keys(servers or {})
       vim.list_extend(ensure_installed, {
         'stylua', -- Used to format Lua code
-        'elixir-ls', -- Elixir Language Server
       })
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
@@ -253,6 +252,10 @@ return {
         automatic_installation = false,
         handlers = {
           function(server_name)
+            -- Skip elixirls since it's managed by elixir-tools.nvim
+            if server_name == 'elixirls' then
+              return
+            end
             local server = servers[server_name] or {}
             -- This handles overriding only values explicitly passed
             -- by the server configuration above. Useful when disabling
