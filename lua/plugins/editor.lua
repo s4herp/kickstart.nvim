@@ -180,6 +180,21 @@ return {
         }
       end, { desc = '[E]lixir [r]outer' })
 
+      -- Find/grep excluding tests
+      vim.keymap.set('n', '<leader>eo', function()
+        builtin.find_files {
+          find_command = { 'fd', '--type', 'f', '--exclude', 'test' },
+          prompt_title = 'Files (no tests)',
+        }
+      end, { desc = '[E]lixir files [o]nly (no tests)' })
+
+      vim.keymap.set('n', '<leader>ego', function()
+        builtin.live_grep {
+          glob_pattern = '!test/**',
+          prompt_title = 'Grep (no tests)',
+        }
+      end, { desc = '[E]lixir [g]rep [o]nly (no tests)' })
+
       -- Grep in specific directories
       vim.keymap.set('n', '<leader>egl', function()
         builtin.live_grep {
