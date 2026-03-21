@@ -2,6 +2,8 @@
 -- Modular configuration following kickstart.nvim best practices
 -- See: https://github.com/nvim-lua/kickstart.nvim
 
+vim.loader.enable()
+
 -- Core configuration
 require 'core.options'    -- Basic vim options and settings
 require 'core.autocmds'   -- Basic autocommands

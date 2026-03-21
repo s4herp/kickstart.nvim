@@ -5,7 +5,7 @@ return {
   -- GitHub Copilot
   {
     'github/copilot.vim',
-    event = 'VimEnter',
+    event = 'InsertEnter',
   },
 
   -- Copilot Chat

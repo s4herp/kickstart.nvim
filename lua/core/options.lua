@@ -84,19 +84,7 @@ if vim.fn.has 'macunix' == 1 and vim.fn.system('uname -m'):match 'arm64' then
   -- Optimize for Apple Silicon
   vim.opt.shell = '/bin/zsh'
 
-  -- Set better defaults for ARM M2
-  vim.opt.lazyredraw = true
-  vim.opt.regexpengine = 1
   vim.opt.synmaxcol = 200
-
-  -- LSP and completion optimizations
   vim.opt.updatetime = 100
-  vim.opt.timeout = true
-  vim.opt.timeoutlen = 300
-
-  -- Better file watching on macOS
   vim.opt.backupskip = '/tmp/*,/private/tmp/*'
-
-  -- Optimize for faster startup
-  vim.loader.enable()
 end

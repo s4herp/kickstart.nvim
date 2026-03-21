@@ -318,6 +318,9 @@ return {
         'bash',
         'c',
         'diff',
+        'elixir',
+        'erlang',
+        'heex',
         'html',
         'lua',
         'luadoc',
@@ -383,17 +386,6 @@ return {
     end,
   },
 
-  -- Treesitter Context (shows context of current node)
-  {
-    'nvim-treesitter/nvim-treesitter-context',
-    config = function()
-      require('treesitter-context').setup {
-        max_lines = 0, -- Sin límite de líneas
-        line_numbers = true, -- Mostrar números de línea en el contexto
-        mode = 'topline', -- Puede ser 'cursor' o 'topline'
-      }
-    end,
-  },
 
   -- Autocompletion
   {
@@ -489,7 +481,7 @@ return {
       -- the rust implementation via `'prefer_rust_with_warning'`
       --
       -- See :h blink-cmp-config-fuzzy for more information
-      fuzzy = { implementation = 'lua' },
+      fuzzy = { implementation = 'prefer_rust_with_warning' },
 
       -- Shows a signature help window while you type arguments for a function
       signature = { enabled = true },
@@ -516,6 +508,8 @@ return {
       format_on_save = false,
       formatters_by_ft = {
         lua = { 'stylua' },
+        elixir = { 'mix' },
+        heex = { 'mix' },
         -- Conform can also run multiple formatters sequentially
         -- python = { "isort", "black" },
         --
