@@ -74,6 +74,9 @@ vim.o.scrolloff = 10
 -- Enable 24-bit RGB color in the TUI
 vim.o.termguicolors = true
 
+-- Ensure nvim-treesitter parser install dir is in runtimepath
+vim.opt.runtimepath:append(vim.fn.stdpath('data') .. '/site')
+
 -- if performing an operation that would fail due to unsaved changes in the buffer (like `:q`),
 -- instead raise a dialog asking if you wish to save the current file(s)
 -- See `:help 'confirm'`
