@@ -53,6 +53,9 @@ function M.setup()
     vim.fn.setreg('+', filename)
     vim.notify('Copied filename: ' .. filename, vim.log.levels.INFO)
   end, { desc = '[Y]ank [F]ilename' })
+
+  -- Markdown preview
+  map('n', '<leader>mp', '<cmd>MarkdownPreviewToggle<CR>', { desc = '[M]arkdown [P]review toggle' })
 end
 
 return M
